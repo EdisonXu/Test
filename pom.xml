@@ -14,11 +14,11 @@
         <env.RSTATE></env.RSTATE>
         <env.PRODUCTNO></env.PRODUCTNO>
     </properties>
-
-	<modules>
-        <module></module>
-    </modules>
 -->
+	<modules>
+        <module>mbean-jboss-test</module>
+    </modules>
+
  <build>
         <plugins>
             <plugin>

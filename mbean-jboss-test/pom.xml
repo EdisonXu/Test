@@ -3,16 +3,40 @@
 
 	<parent>
         <groupId>com.edison.test</groupId>
-        <artifactId>mbean-jboss-test</artifactId>
-        <version>0.1</version>
+        <artifactId>edi-test</artifactId>
+        <version>1.0</version>
     </parent>
 
 	<modelVersion>4.0.0</modelVersion>
     <groupId>com.edison.test</groupId>
-    <artifactId>edi-test</artifactId>
+    <artifactId>mbean-jboss-test</artifactId>
     <name>Edison's Test Collection</name>
-    <packaging>pom</packaging>
+    <packaging>jboss-sar</packaging>
     <version>1.0</version>
-
+<build>
+        <plugins>
+		<plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>jboss-packaging-maven-plugin</artifactId>
+	        <version>2.2</version>
+	        <extensions>true</extensions>
+	        <configuration>
+				<libDirectory>
+					${project.build.directory}/${project.build.finalName}
+				</libDirectory>
+				<excludes>
+					<exclude>com.ericsson.ecds.bcc:bcc-common</exclude>
+					<excludes>com.ericsson.ecds.bcc:sgmb-msg-jar</excludes>
+					<excludes>com.ericsson.ecds.bcc:oam-api-jar</excludes>
+					<excludes>commons-beanutils:commons-beanutils</excludes>
+					<excludes>commons-beanutils:commons-beanutils-core</excludes>
+			        <excludes>commons-collections:commons-collections</excludes>
+					<excludes>commons-digester:commons-digester</excludes>
+					<excludes>commons-logging:commons-logging</excludes>
+				</excludes>
+            </configuration>
+      	</plugin> 
+        </plugins>
+    </build>
 
 </project>
