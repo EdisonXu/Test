@@ -3,14 +3,29 @@ package com.edison.test.mbean;
 /**
  *
  */
-public class HelloWorldManager implements HelloWorldMBean {
+public class HelloWorldManager implements HelloWorldManagerMBean {
 
-    /* (non-Javadoc)
+    private String msg = "Hello world!";
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.edison.test.mbean.HelloWorldMBean#getMsg()
      */
     @Override
     public String getMsg() {
-        return "Hello folks!";
+        return msg;
     }
 
+    /**
+     * @param msg
+     *            the msg to set
+     */
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String printMsg() {
+        return msg + " test!";
+    }
 }
