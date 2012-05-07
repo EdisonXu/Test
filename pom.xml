@@ -17,6 +17,7 @@
 -->
 	<modules>
         <module>mbean-jboss-test</module>
+        <module>count-down-test</module>
     </modules>
 
  <build>
