@@ -11,3 +11,7 @@
 .project
 .classpath
 .settings
+
+/mbean-jboss-test/target/
+/list-comparator-test/target/
+/count-down-test/target/
