@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+        <groupId>com.edison.test</groupId>
+        <artifactId>edi-test</artifactId>
+        <version>1.0</version>
+    </parent>
+
+	<modelVersion>4.0.0</modelVersion>
+    <artifactId>ip-host-test</artifactId>
+    <name>Test for IpHost</name>
+    <packaging>jar</packaging>
+<build>
+<!-- 
+        <plugins>
+		<plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>jboss-packaging-maven-plugin</artifactId>
+	        <version>2.2</version>
+	        <extensions>true</extensions>
+	        <configuration>
+				<libDirectory>
+					${project.build.directory}/${project.build.finalName}
+				</libDirectory>
+				<excludes>
+					<exclude>com.ericsson.ecds.bcc:bcc-common</exclude>
+					<excludes>com.ericsson.ecds.bcc:sgmb-msg-jar</excludes>
+					<excludes>com.ericsson.ecds.bcc:oam-api-jar</excludes>
+					<excludes>commons-beanutils:commons-beanutils</excludes>
+					<excludes>commons-beanutils:commons-beanutils-core</excludes>
+			        <excludes>commons-collections:commons-collections</excludes>
+					<excludes>commons-digester:commons-digester</excludes>
+					<excludes>commons-logging:commons-logging</excludes>
+				</excludes>
+            </configuration>
+      	</plugin> 
+        </plugins>
+         -->
+    </build>
+    
+    <dependencies>
+        <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+            </dependency>        
+    </dependencies>
+
+</project>

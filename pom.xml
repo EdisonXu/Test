@@ -18,6 +18,8 @@
 	<modules>
         <module>mbean-jboss-test</module>
         <module>count-down-test</module>
+        <module>list-comparator-test</module>
+        <module>ip-host-test</module>
     </modules>
 
  <build>
