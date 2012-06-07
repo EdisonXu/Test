@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <groupId>com.edison.test</groupId>
+        <artifactId>remote-bean-test</artifactId>
+        <version>1.0</version>
+    </parent>
+
+	<modelVersion>4.0.0</modelVersion>
+    <artifactId>ear-package</artifactId>
+    <name>Packaging to Ear</name>
+	<packaging>ear</packaging>
+
+    <properties>
+        <pkg.NAME>remote-bean-test</pkg.NAME>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <artifactId>remote-common</artifactId>
+            <groupId>com.edison.test</groupId>
+            <version>1.0</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <artifactId>remote-beans</artifactId>
+            <groupId>com.edison.test</groupId>
+            <version>1.0</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <artifactId>test-ejb</artifactId>
+            <groupId>com.edison.test</groupId>
+            <version>1.0</version>
+            <type>ejb</type>
+        </dependency>
+    </dependencies>
+    
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <finalName>${pkg.NAME}</finalName>
+                    <modules>
+                        <ejbModule>
+                            <groupId>com.edison.test</groupId>
+                            <artifactId>remote-common</artifactId>
+                        </ejbModule>
+                        <ejbModule>
+                            <groupId>com.edison.test</groupId>
+                            <artifactId>remote-beans</artifactId>
+                        </ejbModule>
+                        <ejbModule>
+                            <groupId>com.edison.test</groupId>
+                            <artifactId>test-ejb</artifactId>
+                        </ejbModule>
+                    </modules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>
