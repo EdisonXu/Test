@@ -4,7 +4,7 @@
     
     <persistence-unit name="TestDbManager">
         <jta-data-source>java:/TestManagerDS</jta-data-source>
-        <class>com.edison.test.beans.MessageDbManager</class>
+        <class>com.edison.test.beans.MessageEntity</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />

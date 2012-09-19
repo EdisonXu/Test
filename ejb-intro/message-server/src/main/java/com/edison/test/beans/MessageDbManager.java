@@ -1,9 +1,13 @@
 package com.edison.test.beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.edison.test.domain.Message;
 
@@ -48,6 +52,20 @@ public class MessageDbManager {
     	
     	MessageEntity entity = new MessageEntity(message.getMessage());
         manager.persist(entity);
+    }
+    
+    public List<Message> getAllMessages() {
+    	List<Message> result = new ArrayList<>();
+    	Query q = manager.createQuery("select e from MessageEntity e");
+
+    	@SuppressWarnings("unchecked")
+		List<MessageEntity> list = q.getResultList();
+    	for(MessageEntity e:list)
+    	{
+    		result.add(new Message(e.getMessage()));
+    	}
+    	return result;
+    	
     }
 
 }

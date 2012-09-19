@@ -45,6 +45,10 @@ public class MessageEntity {
         this.message = message;
         this.createTime = new Date();
     }
+    
+    public MessageEntity() {
+        super();
+    }
 
     /**
      * @return the id
