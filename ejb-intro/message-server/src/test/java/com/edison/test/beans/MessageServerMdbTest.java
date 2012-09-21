@@ -11,10 +11,12 @@ import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.naming.NamingException;
 
 import junit.framework.Assert;
 
 import org.apache.openejb.api.LocalClient;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.edison.test.OpenEJBTestBase;
@@ -28,6 +30,17 @@ public class MessageServerMdbTest extends OpenEJBTestBase{
 	@Resource(mappedName = "queue/TestQueue")
 	private Queue queue;
 	
+	@Before
+	public void bind()
+	{
+		try {
+			if(ctxt!=null)
+				ctxt.bind("inject", this);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@Test
 	public void testOnMessage() {

@@ -7,10 +7,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.naming.NamingException;
 
 import junit.framework.Assert;
 
 import org.apache.openejb.api.LocalClient;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.edison.test.OpenEJBTestBase;
@@ -18,12 +20,26 @@ import com.edison.test.domain.Message;
 
 @LocalClient
 public class MessageDbManagerTest extends OpenEJBTestBase{
+//extends OpenEJBTestBase{
 	
 	@EJB
 	MessageDbManager dbManager;
 	
 	@EJB
     private Caller transactionalCaller;
+	
+	@Before
+	public void bind()
+	{
+		try {
+			//Context ctxt = OpenEJBContainer.getInstance().getContext();
+			if(ctxt!=null)
+				ctxt.bind("inject", this);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/*protected void setUp() throws Exception {
         final Properties p = new Properties();

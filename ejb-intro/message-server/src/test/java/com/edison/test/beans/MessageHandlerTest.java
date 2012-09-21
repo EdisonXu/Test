@@ -1,10 +1,12 @@
 package com.edison.test.beans;
 
 import javax.ejb.EJB;
+import javax.naming.NamingException;
 
 import junit.framework.Assert;
 
 import org.apache.openejb.api.LocalClient;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.edison.test.OpenEJBTestBase;
@@ -16,6 +18,18 @@ public class MessageHandlerTest extends OpenEJBTestBase{
 	
 	@EJB
 	private MessageHandler handler;
+	
+	@Before
+	public void bind()
+	{
+		try {
+			if(ctxt!=null)
+				ctxt.bind("inject", this);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/*@BeforeClass
 	public static void start() {
