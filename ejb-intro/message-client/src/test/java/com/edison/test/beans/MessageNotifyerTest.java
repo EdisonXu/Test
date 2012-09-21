@@ -16,7 +16,7 @@ public class MessageNotifyerTest extends OpenEJBTestBase{
 	@EJB
 	MessageNotifyer notifyer;
 	
-	/*@Before
+	@Before
 	public void bind()
 	{
 		try {
@@ -27,7 +27,7 @@ public class MessageNotifyerTest extends OpenEJBTestBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 	@Test
 	public void testNotifyMessage() {

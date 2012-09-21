@@ -16,3 +16,5 @@
 /list-comparator-test/target/
 /count-down-test/target/
 /ip-host-test/target/
+ejb-intro/message-client/target/
+ejb-intro/message-server/target/

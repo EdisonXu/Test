@@ -30,7 +30,7 @@ public abstract class OpenEJBTestBase{
 		}
 	}
 	
-	@Before
+/*	@Before
 	public void bind()
 	{
 		try {
@@ -40,7 +40,7 @@ public abstract class OpenEJBTestBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	
 	@AfterClass
