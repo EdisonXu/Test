@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server xmlns="urn:jboss:service:7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:jboss:service:7.0 jboss-service_7_0.xsd">
+
+	<mbean code="com.edison.test.mbean.TimerServiceMemoryTest" name="com.edison.test:service=TimerServiceMemoryTest">
+		<xmbean>
+			<!-- comment the attribute part cause Jboss will auto init according to 
+				public status of get/set in Mbean interface -->
+			<operation>
+				<description>Start timer</description>
+				<name>test</name>
+				<return-type>void</return-type>
+			</operation>
+		</xmbean>
+	</mbean>
+</server>

@@ -2,7 +2,6 @@ package com.edison.test;
 
 import java.util.Properties;
 
-import javax.ejb.embeddable.EJBContainer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,9 +10,12 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import com.edison.test.mbean.HelloWorldManager;
+import com.edison.test.mbean.HelloWorldManagerMBean;
+
 public abstract class OpenEJBTestBase{
 
-	protected static Context ctxt = null;
+	static Context ctxt = null;
 	
 	@BeforeClass
 	public static void initializeOpenEJB() throws NamingException {
@@ -21,16 +23,17 @@ public abstract class OpenEJBTestBase{
 		try {
 			Properties p = new Properties();
 			p.put("openjpa.jdbc.SynchronizeMappings", "buildSchema(ForeignKeys=true)");
+			// p.put("openejb.user.mbeans.list", HelloWorldManagerMBean.MBEAN_NAME);
 		    p.put(Context.INITIAL_CONTEXT_FACTORY, "org.apache.openejb.client.LocalInitialContextFactory");
+		    //p.put("openejb.deployments.classpath.include", "file:///C:/Edison/WorkShop/github/Test/mbean-jboss-test/target/classes/.*");
 			ctxt = new InitialContext(p);
-		    //ctxt = EJBContainer.createEJBContainer().getContext();
 		} 
-		catch (Exception ignored) {
+		catch (NamingException ignored) {
 			
 		}
 	}
 	
-/*	@Before
+	/*@Before
 	public void bind()
 	{
 		try {
@@ -41,7 +44,6 @@ public abstract class OpenEJBTestBase{
 			e.printStackTrace();
 		}
 	}*/
-	
 	
 	@AfterClass
 	public static void destroy() throws Exception {

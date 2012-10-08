@@ -1,6 +1,8 @@
 package com.edison.test.beans;
 
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.naming.Context;
 import javax.naming.NamingException;
 
 import junit.framework.Assert;
@@ -9,12 +11,13 @@ import org.apache.openejb.api.LocalClient;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.edison.test.OpenEJBTestBase;
+import com.edison.test.OpenEJBTestContainer;
 
-@LocalClient
-public class MessageHandlerTest extends OpenEJBTestBase{
+@ManagedBean
+public class MessageHandlerTest{
 
 	//private static EJBContainer ejbContainer;
+	private static Context ctxt;
 	
 	@EJB
 	private MessageHandler handler;
@@ -23,6 +26,7 @@ public class MessageHandlerTest extends OpenEJBTestBase{
 	public void bind()
 	{
 		try {
+			ctxt = OpenEJBTestContainer.getInstance().getContext();
 			if(ctxt!=null)
 				ctxt.bind("inject", this);
 		} catch (NamingException e) {

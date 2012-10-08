@@ -4,16 +4,16 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.edison.test</groupId>
-	<artifactId>ejb-intro</artifactId>
-	<name>Introduction of EJB</name>
+	<artifactId>timerservice-memory-test</artifactId>
+	<name>Test project for timer memory link</name>
 	<packaging>pom</packaging>
 	<version>1.0</version>
 
 	<!-- <properties> <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
 		<env.RSTATE></env.RSTATE> <env.PRODUCTNO></env.PRODUCTNO> </properties> -->
 	<modules>
-		<module>message-client</module>
-		<module>message-server</module>
+		<module>timer-jmx</module>
+		<module>timer-ejb</module>
 	</modules>
 
 	<build>
@@ -179,7 +179,6 @@
 				<configuration>
 					<formats>
 						<format>xml</format>
-						<format>html</format>
 					</formats>
 					<check>
 						<haltOnFailure>false</haltOnFailure>
@@ -267,11 +266,6 @@
 			</dependency> <dependency> <groupId>commons-configuration</groupId> <artifactId>commons-configuration</artifactId> 
 			</dependency> -->
 		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
@@ -353,13 +347,6 @@
 				<version>3.1</version> <scope>compile</scope> </dependency> <dependency> 
 				<groupId>commons-configuration</groupId> <artifactId>commons-configuration</artifactId> 
 				<version>1.6</version> <scope>compile</scope> </dependency> -->
-			<dependency>
-				<groupId>org.jboss.arquillian</groupId>
-				<artifactId>arquillian-bom</artifactId>
-				<version>1.0.2.Final</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

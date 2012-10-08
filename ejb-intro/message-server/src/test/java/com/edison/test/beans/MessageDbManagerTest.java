@@ -3,10 +3,12 @@ package com.edison.test.beans;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.naming.Context;
 import javax.naming.NamingException;
 
 import junit.framework.Assert;
@@ -15,12 +17,13 @@ import org.apache.openejb.api.LocalClient;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.edison.test.OpenEJBTestBase;
+import com.edison.test.OpenEJBTestContainer;
 import com.edison.test.domain.Message;
 
-@LocalClient
-public class MessageDbManagerTest extends OpenEJBTestBase{
-//extends OpenEJBTestBase{
+@ManagedBean
+public class MessageDbManagerTest{
+	
+	private static Context ctxt;
 	
 	@EJB
 	MessageDbManager dbManager;
@@ -32,9 +35,10 @@ public class MessageDbManagerTest extends OpenEJBTestBase{
 	public void bind()
 	{
 		try {
-			//Context ctxt = OpenEJBContainer.getInstance().getContext();
+			ctxt = OpenEJBTestContainer.getInstance().getContext();
 			if(ctxt!=null)
 				ctxt.bind("inject", this);
+			System.out.println("!");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,7 +74,7 @@ public class MessageDbManagerTest extends OpenEJBTestBase{
 		
 	}
 	
-	@Test
+	 @Test
 	 public void testWithTransaction() throws Exception {
 	        transactionalCaller.call(new Callable() {
 	            public Object call() throws Exception {

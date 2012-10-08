@@ -1,17 +1,18 @@
 package com.edison.test.beans;
 
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.naming.Context;
 import javax.naming.NamingException;
 
-import org.apache.openejb.api.LocalClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.edison.test.OpenEJBTestBase;
+import com.edison.test.OpenEJBTestContainer;
 
-@LocalClient
-public class MessageNotifyerTest extends OpenEJBTestBase{
+@ManagedBean
+public class MessageNotifyerTest{
 	
 	@EJB
 	MessageNotifyer notifyer;
@@ -20,7 +21,7 @@ public class MessageNotifyerTest extends OpenEJBTestBase{
 	public void bind()
 	{
 		try {
-			//Context ctxt = OpenEJBContainer.getInstance().getContext();
+			Context ctxt = OpenEJBTestContainer.getInstance().getContext();
 			if(ctxt!=null)
 				ctxt.bind("inject", this);
 		} catch (NamingException e) {

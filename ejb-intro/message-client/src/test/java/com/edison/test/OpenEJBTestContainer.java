@@ -4,19 +4,28 @@ import java.util.Properties;
 
 import javax.ejb.embeddable.EJBContainer;
 import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+public class OpenEJBTestContainer{
 
-public abstract class OpenEJBTestBase{
-
-	protected static Context ctxt = null;
+	//protected static Context ctxt = null;
 	
-	@BeforeClass
-	public static void initializeOpenEJB() throws NamingException {
+	private static EJBContainer instance = null;
+	
+	private OpenEJBTestContainer(){}
+	
+	public static EJBContainer getInstance()
+	{
+		if(instance == null)
+		{
+			Properties p = new Properties();
+			p.put("openjpa.jdbc.SynchronizeMappings", "buildSchema(ForeignKeys=true)");
+		    //p.put(Context.INITIAL_CONTEXT_FACTORY, "org.apache.openejb.client.LocalInitialContextFactory");
+			instance = EJBContainer.createEJBContainer(p);
+		}
+		return instance;
+	}
+	
+/*	public static void initializeOpenEJB() throws NamingException {
 		
 		try {
 			Properties p = new Properties();
@@ -28,7 +37,7 @@ public abstract class OpenEJBTestBase{
 		catch (Exception ignored) {
 			
 		}
-	}
+	}*/
 	
 /*	@Before
 	public void bind()
@@ -42,7 +51,7 @@ public abstract class OpenEJBTestBase{
 		}
 	}*/
 	
-	
+/*	
 	@AfterClass
 	public static void destroy() throws Exception {
 		try {
@@ -54,5 +63,5 @@ public abstract class OpenEJBTestBase{
 		{
 			
 		}
-	}
+	}*/
 }

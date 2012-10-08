@@ -1,5 +1,6 @@
 package com.edison.test.beans;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.Resource;
 import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
@@ -11,18 +12,18 @@ import javax.jms.QueueSender;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.naming.Context;
 import javax.naming.NamingException;
 
 import junit.framework.Assert;
 
-import org.apache.openejb.api.LocalClient;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.edison.test.OpenEJBTestBase;
+import com.edison.test.OpenEJBTestContainer;
 
-@LocalClient
-public class MessageServerMdbTest extends OpenEJBTestBase{
+@ManagedBean
+public class MessageServerMdbTest{
 
 	@Resource
 	private ConnectionFactory connectionFactory;
@@ -30,10 +31,13 @@ public class MessageServerMdbTest extends OpenEJBTestBase{
 	@Resource(mappedName = "queue/TestQueue")
 	private Queue queue;
 	
+	private static Context ctxt;
+	
 	@Before
-	public void bind()
+	public void init()
 	{
 		try {
+			ctxt = OpenEJBTestContainer.getInstance().getContext();
 			if(ctxt!=null)
 				ctxt.bind("inject", this);
 		} catch (NamingException e) {
