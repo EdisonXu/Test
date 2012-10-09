@@ -18,3 +18,4 @@
 /ip-host-test/target/
 ejb-intro/message-client/target/
 ejb-intro/message-server/target/
+watch-service-test/target/
