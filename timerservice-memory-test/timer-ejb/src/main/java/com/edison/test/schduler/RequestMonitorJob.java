@@ -34,7 +34,7 @@ public class RequestMonitorJob implements MyJob {
 			
 			Message msg = new Message(stb.getCounter().getAndIncrement(), "Test");
 			//if(msg.getId() < 800l)
-			{
+			/*{
 				//start
 				scheduler.schedule(new Date(System.currentTimeMillis()), new IncreaseJob(msg, ttb.getStb()));
 				
@@ -44,6 +44,19 @@ public class RequestMonitorJob implements MyJob {
 				scheduler.schedule(new Date(System.currentTimeMillis() + 20*1000), new DecreaseJob(msg, ttb.getStb()));
 				
 				scheduler.schedule(new Date(System.currentTimeMillis() + 10), new RequestMonitorJob(ttb.getStb()));
+			}
+			*/
+			for(int i = 0;i<800;i++)
+			{
+				System.out.println("Schdule DelayJob: " + i);
+				scheduler.schedule(new Date(new Date().getTime() + 2*1000), new DelayJob(new Date(new Date().getTime() + 2*1000)));
+				try {
+					// 4*1000/800 = 5 (ms)
+					Thread.sleep(50);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				JobSizeCounter.increaseJobCounter(DelayJob.class);
 			}
 			
 			

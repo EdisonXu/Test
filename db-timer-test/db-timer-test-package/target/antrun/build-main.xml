@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <copy todir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package/../release/modules/com/edison/test/db-timer-test-common/main">
+    <fileset dir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package/../db-timer-test-common/target" includes="**/*.jar"/>
+    <fileset dir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package" includes="module.xml"/>
+  </copy>
+  <copy todir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package/../release/deployments">
+    <fileset dir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package" includes="ojdbc6.jar"/>
+    <fileset dir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package/../db-timer-test-consumer-ear/target" includes="**/*.ear"/>
+    <fileset dir="C:\Edison\Work\GitRepository\github\Test\db-timer-test\db-timer-test-package/../db-timer-test-producer-ear/target" includes="**/*.ear"/>
+  </copy>
+</target>
+</project>

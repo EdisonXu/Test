@@ -2,30 +2,14 @@
 <server xmlns="urn:jboss:service:7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="urn:jboss:service:7.0 jboss-service_7_0.xsd">
 
-	<mbean code="com.edison.test.mbean.MessageReceiver" name="com.edison.test:service=MessageReceiver">
+	<mbean code="com.edison.test.mbean.TimerServiceMemoryTest" name="com.edison.test:service=TimerServiceMemoryTest">
 		<xmbean>
 			<!-- comment the attribute part cause Jboss will auto init according to 
 				public status of get/set in Mbean interface -->
-			<attribute access="read-write" getMethod="getMsg"
-				setMethod="setMsg">
-				<description>Message</description>
-				<name>msg</name>
-				<type>java.lang.String</type>
-			</attribute>
 			<operation>
 				<description>Start timer</description>
 				<name>test</name>
 				<return-type>void</return-type>
-			</operation>
-
-			<operation>
-				<description>Input message and send to server</description>
-				<name>sendMessage</name>
-				<parameter>
-					<name>message</name>
-					<type>java.lang.String</type>
-				</parameter>
-				<return-type>java.lang.String</return-type>
 			</operation>
 		</xmbean>
 	</mbean>

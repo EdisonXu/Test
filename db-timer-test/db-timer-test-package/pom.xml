@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+        <artifactId>db-timer-test</artifactId>
+        <groupId>com.edison.test</groupId>
+        <version>1.0</version>
+    </parent>
+	<artifactId>db-timer-test-package</artifactId>
+	<name>Build packages</name>
+	<packaging>pom</packaging>
+
+	<dependencies>
+        <dependency>
+            <artifactId>db-timer-test-producer</artifactId>
+            <groupId>com.edison.test</groupId>
+            <version>1.0</version>
+            <type>ejb</type>
+        </dependency>
+    </dependencies>
+	
+	<build>
+        <plugins>
+		<!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptor>src/main/resources/assembly.xml</descriptor>
+                </configuration>
+            </plugin>
+			-->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copyRelease</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${basedir}/../release/modules/com/edison/test/db-timer-test-common/main">
+                                    <fileset dir="${basedir}/../db-timer-test-common/target" includes="**/*.jar"/>
+									<fileset dir="${basedir}" includes="module.xml"/>
+                                </copy>
+								<copy todir="${basedir}/../release/deployments">
+									<fileset dir="${basedir}" includes="ojdbc6.jar"/>
+                                    <fileset dir="${basedir}/../db-timer-test-consumer-ear/target" includes="**/*.ear"/>
+									<fileset dir="${basedir}/../db-timer-test-producer-ear/target" includes="**/*.ear"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

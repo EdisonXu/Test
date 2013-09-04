@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+        <groupId>com.edison.test</groupId>
+        <artifactId>singleton-test</artifactId>
+        <version>1.0</version>
+    </parent>
+
+	<modelVersion>4.0.0</modelVersion>
+    <artifactId>firstear</artifactId>
+    <name>First ear package</name>
+    <packaging>ear</packaging>
+	
+	<dependencies>
+		<dependency>
+            <artifactId>firstImpl</artifactId>
+            <groupId>com.edison.test</groupId>
+            <version>1.0</version>
+            <type>ejb</type>
+        </dependency>
+    </dependencies>
+	
+<build>
+        <plugins>
+			<plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.8</version>
+                <configuration>
+                    <version>6</version>
+                    <applicationName>firstear</applicationName>
+                    <finalName>firstear</finalName>                    
+                    <archive>
+                        <manifestEntries>
+							<Dependencies></Dependencies>
+                        </manifestEntries>
+                    </archive>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <javaModule>
+                            <groupId>com.edison.test</groupId>
+                            <artifactId>common</artifactId>
+                            <includeInApplicationXml>true
+                            </includeInApplicationXml>
+                            <bundleDir>./</bundleDir>
+                        </javaModule>
+                    </modules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
