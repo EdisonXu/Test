@@ -1,0 +1,1 @@
+https://docs.jboss.org/author/display/AS7/JAX-RS+Reference+Guide

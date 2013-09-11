@@ -1,5 +1,7 @@
 package com.edison.test.impl;
 
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -21,18 +23,13 @@ public class MainProcess {
 	@PostConstruct
 	public void startup()
 	{
-		for(int i=0;i<1;i++)
+		for(int i=0;i<500;i++)
 		{
 			TestDAO td = new TestDAO();
 			td.setAttribute("test");
-			
-			td = dbManager.create(td);
-			
-			UpdateEntityJob updateJob = new UpdateEntityJob(td);
-
-			ts.schedule(2000l, updateJob);
-			
+			ts.schedule(new Date(), new CreateEntityJob(td));
 		}
+		System.out.println("Create finished.");
 	}
 	
 }

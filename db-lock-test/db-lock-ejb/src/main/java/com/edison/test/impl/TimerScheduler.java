@@ -14,13 +14,13 @@ import javax.ejb.TransactionAttributeType;
 import com.edison.test.ifc.MyJob;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class TimerScheduler {
 
 	@Resource
     private TimerService timerService;
 	
-	public void schedule(Long time, MyJob job)
+	public void schedule(Date time, MyJob job)
 	{
 		TimerConfig tc1 = new TimerConfig();
 		tc1.setInfo(job);

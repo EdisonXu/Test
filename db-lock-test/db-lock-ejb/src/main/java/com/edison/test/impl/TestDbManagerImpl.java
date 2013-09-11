@@ -32,6 +32,7 @@ public class TestDbManagerImpl implements TestDbManager {
 		te.setAttribute(input.getAttribute());
 		
 		entityManager.persist(te);
+		entityManager.flush();
 		return te.transform();
 	}
 
@@ -46,12 +47,12 @@ public class TestDbManagerImpl implements TestDbManager {
 		
 		if(old==null)
 		{
-			log.error("No old entity found when trying to update");
+			log.error("No old entity " + input.getId() + "  found when trying to update");
 			return;
 		}
 		old.setAttribute(input.getAttribute());
 		entityManager.merge(old);
-		
+		entityManager.flush();
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class TestDbManagerImpl implements TestDbManager {
 		
 		if(old==null)
 		{
-			log.error("No TestEntity found to remove!!!!");
+			log.error("No old entity " + id + "found to remove!!!!");
 			return null;
 		}
 		System.out.println("Remove " + old.getId()+" : "+old.getAttribute());
@@ -82,8 +83,17 @@ public class TestDbManagerImpl implements TestDbManager {
 	@Override
 	public void lock(Long id) {
 		System.out.println("lock entity: "+id);
-		TestEntity old = entityManager.find(TestEntity.class, id, LockModeType.PESSIMISTIC_WRITE);
-		//entityManager.lock(old, LockModeType.PESSIMISTIC_WRITE);
+		//TestEntity old = entityManager.find(TestEntity.class, id, LockModeType.PESSIMISTIC_WRITE);
+		TestEntity old = entityManager.find(TestEntity.class, id);
+		if(old==null)
+		{
+		    System.out.println("whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+		    return;
+		}
+		//entityManager.merge(old);
+		//entityManager.refresh(old, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.lock(old, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.flush();
 	}
 
 }

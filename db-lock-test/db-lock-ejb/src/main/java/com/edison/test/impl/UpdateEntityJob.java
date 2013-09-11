@@ -1,16 +1,14 @@
 package com.edison.test.impl;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import java.util.Date;
 
 import com.edison.test.TestDAO;
 import com.edison.test.ifc.MyJob;
-import com.edison.test.ifc.TestDbManager;
 
-public class UpdateEntityJob implements MyJob {
+public class UpdateEntityJob extends MyJob {
 
-	private TestDAO td;
-	private TestDbManager dbManager;
+    private static final long serialVersionUID = -4634426316070405136L;
+    private TestDAO td;
 	
 	
 	public UpdateEntityJob(TestDAO td) {
@@ -20,25 +18,21 @@ public class UpdateEntityJob implements MyJob {
 
 	@Override
 	public void execute() {
-		TimerScheduler ts = null;
-		try {
-			InitialContext ctx = new InitialContext();
-			ts = (TimerScheduler)ctx.lookup("java:module/TimerScheduler");
-			dbManager = (TestDbManager)ctx.lookup("java:module/TestDbManagerImpl");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		//dbManager.lock(td.getId());
-		td.setAttribute("Update");
+	    //System.out.println("Execute UpdateEntityJob");
+		td.getLock().lock();
+		td.getLock().unlock();
+		//getDbManager().lock(td.getId());
 		ReupdateEntityJob job = new ReupdateEntityJob(td);
-		ts.schedule(2l, job);
-		try {
-			Thread.sleep(1l);
+		getTimer().schedule(new Date(), job);
+		/*try {
+			Thread.sleep(2000l);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		System.out.println("Execute Update " + td.getId());
-		dbManager.update(td);
+		td.setAttribute("Update");
+		getDbManager().update(td);
+		
 	}
 
 }

@@ -2,17 +2,13 @@ package com.edison.test.impl;
 
 import java.util.Date;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import com.edison.test.TestDAO;
 import com.edison.test.ifc.MyJob;
-import com.edison.test.ifc.TestDbManager;
 
-public class RemoveEntityJob implements MyJob {
+public class RemoveEntityJob extends MyJob {
 
-	private TestDAO td;
-	private TestDbManager dbManager;
+    private static final long serialVersionUID = 1386460325466037335L;
+    private TestDAO td;
 	
 	public RemoveEntityJob(TestDAO td) {
 		super();
@@ -21,21 +17,15 @@ public class RemoveEntityJob implements MyJob {
 
 	@Override
 	public void execute() {
-		
-		try {
-			InitialContext ctx = new InitialContext();
-			dbManager = (TestDbManager)ctx.lookup("java:module/TestDbManagerImpl");
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
+		//System.out.println("Execute RemoveEntityJob");
 		Date now = new Date();
-		dbManager.lock(td.getId());
+		getDbManager().lock(td.getId());
 		Date after = new Date();
 		if(!now.equals(after))
 		{
 			System.out.println("I'm waiting! "+(after.getTime()-now.getTime()));
 		}
-		dbManager.remove(td.getId());
+		getDbManager().remove(td.getId());
 		System.out.println("Removed cost "+(new Date().getTime()-now.getTime()));
 	}
 
