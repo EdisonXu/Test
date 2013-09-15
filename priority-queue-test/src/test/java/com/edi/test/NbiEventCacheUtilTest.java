@@ -1,4 +1,4 @@
-package com.ericsson.ecds.bcc.prov.events;
+package com.edi.test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -8,18 +8,15 @@ import java.util.concurrent.ExecutorService;
 
 import javax.naming.Context;
 
-import org.apache.webbeans.util.Asserts;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ericsson.bmsc.oam.config.ifc.BccConfigManagerRemote;
-import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
-import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventHttpSenderRemote;
-import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventSenderRemote;
-import com.ericsson.ecds.bcc.prov.common.exception.ProvisioningError;
-import com.ericsson.ecds.bcc.prov.common.exception.ProvisioningException;
+import com.edi.test.ifc.BccConfigManagerRemote;
+import com.edi.test.ifc.BmscEventHttpSenderRemote;
+import com.edi.test.ifc.BmscEventSenderRemote;
 
 public class NbiEventCacheUtilTest {
 
@@ -84,17 +81,17 @@ public class NbiEventCacheUtilTest {
 
     @Test
     public void testGetSenderLogic() {
-        Asserts.assertNotNull(NbiEventCacheUtil.getSenderLogic());
+        Assert.assertNotNull(NbiEventCacheUtil.getSenderLogic());
     }
 
     @Test
     public void testGetSender() {
-        Asserts.assertNotNull(NbiEventCacheUtil.getSender());
+        Assert.assertNotNull(NbiEventCacheUtil.getSender());
     }
 
     @Test
     public void testGetBccConfig() {
-        Asserts.assertNotNull(NbiEventCacheUtil.getBccConfig());
+        Assert.assertNotNull(NbiEventCacheUtil.getBccConfig());
     }
 
     @Test
@@ -107,7 +104,7 @@ public class NbiEventCacheUtilTest {
             });
             NbiEventCacheUtil.updateBmscEventInDB(new BmscEventRetryTO());
             assertTrue(true);
-        } catch (ProvisioningException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             assertFalse(true);
         }
@@ -120,12 +117,12 @@ public class NbiEventCacheUtilTest {
             ctxt.checking(new Expectations(){
                 {
                     allowing(sendLogic).updateBmscEvent(with(any(BmscEventRetryTO.class)));
-                    will(throwException(new ProvisioningException(ProvisioningError.UNKNOWN)));
+                    will(throwException(new Exception("UNKNOWN")));
                 }
             });
             NbiEventCacheUtil.updateBmscEventInDB(new BmscEventRetryTO());
             assertTrue(true);
-        } catch (ProvisioningException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             assertFalse(true);
         }
@@ -142,7 +139,7 @@ public class NbiEventCacheUtilTest {
             });
             NbiEventCacheUtil.removeBmscEventInDB(new BmscEventRetryTO());
             assertTrue(true);
-        } catch (ProvisioningException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             assertFalse(true);
         }
@@ -154,12 +151,12 @@ public class NbiEventCacheUtilTest {
             ctxt.checking(new Expectations(){
                 {
                     allowing(sendLogic).removeBmscEvent(with(any(Long.class)));
-                    will(throwException(new ProvisioningException(ProvisioningError.UNKNOWN)));
+                    will(throwException(new Exception()));
                 }
             });
             NbiEventCacheUtil.removeBmscEventInDB(new BmscEventRetryTO());
             assertTrue(true);
-        } catch (ProvisioningException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             assertFalse(true);
         }

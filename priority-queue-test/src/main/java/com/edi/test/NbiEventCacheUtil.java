@@ -9,13 +9,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.edi.test.ifc.BccConfigManagerRemote;
-import com.ericsson.bmsc.common.constant.ErrorCode;
-import com.ericsson.bmsc.oam.logging.BmscLogger;
-import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
-import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventHttpSender;
-import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventHttpSenderRemote;
-import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventSenderRemote;
-import com.ericsson.ecds.bcc.prov.common.exception.ProvisioningException;
+import com.edi.test.ifc.BmscEventHttpSenderRemote;
+import com.edi.test.ifc.BmscEventSenderRemote;
 
 public class NbiEventCacheUtil {
 
@@ -47,11 +42,7 @@ public class NbiEventCacheUtil {
             return (BmscEventSenderRemote) getContext()
                     .lookup(BmscEventSenderRemote.GLOBAL_JNDI_NAME);
         } catch (NamingException e) {
-            BmscLogger.eventError(BmscLogger.PROVISIONING,
-                    ErrorCode.JNDI_LOOKUP_FAILED, BmscEventSenderRemote.GLOBAL_JNDI_NAME,
-                    e.getMessage());
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING,
-                    "NbiEventCacheUtil:getSenderLogic", e);
+            e.printStackTrace();
             return null;
         }
     }
@@ -61,11 +52,7 @@ public class NbiEventCacheUtil {
             return (BmscEventHttpSenderRemote) getContext()
                     .lookup(BmscEventHttpSenderRemote.GLOBAL_PORTABLE_NAME);
         } catch (NamingException e) {
-            BmscLogger.eventError(BmscLogger.PROVISIONING,
-                    ErrorCode.JNDI_LOOKUP_FAILED, BmscEventHttpSender.GLOBAL_PORTABLE_NAME,
-                    e.getMessage());
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING,
-                    "NbiEventCacheUtil:getSender", e);
+        	e.printStackTrace();
             return null;
         }
     }
@@ -75,11 +62,7 @@ public class NbiEventCacheUtil {
             return (BccConfigManagerRemote) getContext()
                     .lookup(BccConfigManagerRemote.GLOBAL_JNDI_NAME);
         } catch (NamingException e) {
-            BmscLogger.eventError(BmscLogger.PROVISIONING,
-                    ErrorCode.JNDI_LOOKUP_FAILED, BccConfigManagerRemote.GLOBAL_JNDI_NAME,
-                    e.getMessage());
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING,
-                    "NbiEventCacheUtil:getBccConfig", e);
+        	e.printStackTrace();
             return null;
         }
     }
@@ -92,10 +75,8 @@ public class NbiEventCacheUtil {
             }
             bmscEvent.setRetryUpdateTime(new Date(System.currentTimeMillis()));
             getSenderLogic().updateBmscEvent(bmscEvent);
-        } catch (ProvisioningException e) {
-            BmscLogger.eventWarn(BmscLogger.PROVISIONING, "Failed to update retry time for BDC event " + bmscEvent.getId()
-                    + ", type is " + bmscEvent.getNotificationType());
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING, "NbiEventCacheUtil:handleSendEventFailed", e);
+        } catch (Exception e) {
+        	e.printStackTrace();
         } finally
         {
             bmscEvent.getLock().unlock();
@@ -108,13 +89,12 @@ public class NbiEventCacheUtil {
         try {
             bmscEvent.getLock().lock();
             if (bmscEventId == null) {
-                BmscLogger.eventWarn(BmscLogger.PROVISIONING, "Cannot remove BDC event by null ID");
+                System.out.println("Cannot remove BDC event by null ID");
                 return;
             }
             getSenderLogic().removeBmscEvent(bmscEventId);
-        } catch (ProvisioningException e) {
-            BmscLogger.eventWarn(BmscLogger.PROVISIONING, "Failed to remove BDC event " + bmscEventId + ", reason: " + e.getMessage());
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING, "NbiEventCacheUtil:removeBmscEvent", e);
+        } catch (Exception e) {
+        	e.printStackTrace();
         }finally
         {
             bmscEvent.getLock().unlock();

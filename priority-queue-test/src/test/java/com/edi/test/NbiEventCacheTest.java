@@ -1,6 +1,6 @@
-package com.ericsson.ecds.bcc.prov.events;
+package com.edi.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -8,7 +8,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
 
 public class NbiEventCacheTest {
 

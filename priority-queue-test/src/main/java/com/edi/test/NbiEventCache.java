@@ -60,7 +60,8 @@ public class NbiEventCache {
      * @return the head of this cache, or null if this cache is empty
      */
     public static BmscEventRetryTO poll(){
-        //internalTransLock.lock();
+        if(!internalTransLock.isHeldByCurrentThread())
+        	internalTransLock.lock();
         BmscEventRetryTO event = queue.poll();
         
         if(event==null){
@@ -128,9 +129,13 @@ public class NbiEventCache {
     public static List<BmscEventRetryTO> clear()
     {
         List<BmscEventRetryTO> list = new ArrayList<>();
-        if(internalTransLock.isLocked() && !internalTransLock.isHeldByCurrentThread())
-            return list;
-        internalTransLock.lock();    
+        if(!internalTransLock.isHeldByCurrentThread())
+        	internalTransLock.lock();    
+        
+        // double confirm the status here to avoid multiple threads are
+        // executing the clear() method to make the new coming events after clear is removed.
+        if(!getStatus().equals(STATUS.FULL))
+        	return list;
         
         if(queue.size()>0)
             list.addAll(queue);
@@ -159,7 +164,8 @@ public class NbiEventCache {
             if(event!=null)
                 size.decrementAndGet();
             if(size.get()>3500)
-                System.out.println(Thread.currentThread().getName() + " Reduce to" + size.get());
+                System.out.println(Thread.currentThread().getName() + " Reduce to " + size.get());
+            internalTransLock.unlock();
             return event; 
         }
     }

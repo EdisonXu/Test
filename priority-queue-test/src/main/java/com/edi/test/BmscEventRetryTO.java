@@ -256,8 +256,7 @@ public class BmscEventRetryTO extends BmscEventTO {
                 + getDeliveryInstanceId() + ", getDescription()="
                 + getDescription() + ", getContentURI()=" + getContentURI()
                 + ", getMd5Value()=" + getMd5Value() + ", getContentGroupId()="
-                + getContentGroupId() + ", getRemovedDeliveryContents()="
-                + Arrays.toString(getRemovedDeliveryContents().toArray()) + "]";
+                + getContentGroupId() + ", getRemovedDeliveryContents()=";
     }
 	
 }

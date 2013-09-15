@@ -1,4 +1,4 @@
-package com.ericsson.ecds.bcc.prov.data;
+package com.edi.test;
 
 import java.util.Date;
 
@@ -16,8 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
-import com.ericsson.ecds.bcc.prov.common.event.NotificationTypeEnum;
+import com.edi.test.ifc.Queries;
 
 @Entity
 @Table(name = "T_BMSC_EVENT")
@@ -306,7 +305,7 @@ public class BmscEventEntity {
                 retryTimes, retryStartTime, retryUpdateTime, extension, "",
                 notificationType, embmsSessionId, deliverySessionId,
                 deliveryInstanceId, description, contentUri, md5value,
-                contentGroupId, null);
+                contentGroupId);
         return bmscEventRetryTO;
     }
 

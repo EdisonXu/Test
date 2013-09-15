@@ -2,6 +2,8 @@ package com.edi.test;
 
 import java.util.List;
 
+import com.edi.test.ifc.BmscEventHttpSenderRemote;
+
 /**
  * A stand alone thread task to send NBI event to BMC.
  *
@@ -31,7 +33,7 @@ public class NbiEventSendTask implements Runnable{
             {
                 event = NbiEventCache.poll();
             }
-            System.out.println(Thread.currentThread().getName() + " discard event " + event + " queue size" + NbiEventCache.size());
+            //System.out.println(Thread.currentThread().getName() + " discard event " + event + " queue size" + NbiEventCache.size());
             handleOverload(event);
             break;
         case OK:
@@ -104,9 +106,9 @@ public class NbiEventSendTask implements Runnable{
             boolean isSendOK = bmscEventSender.send(event);
 
             if (isSendOK) {
-            	System.out.println(Thread.currentThread().getName()+
+            	/*System.out.println(Thread.currentThread().getName()+
                         " Successful to send NBI event '" + event.toString() + "', current queue size: " 
-                                + NbiEventCache.size());
+                                + NbiEventCache.size());*/
                 break;
             }
 
