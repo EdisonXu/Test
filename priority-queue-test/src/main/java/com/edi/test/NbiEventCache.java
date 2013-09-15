@@ -1,4 +1,4 @@
-package com.ericsson.ecds.bcc.prov.events;
+package com.edi.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +10,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.ericsson.bmsc.oam.logging.BmscLogger;
-import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
 
 /**
  * A queue to store the event to be reported to NBI(BMC).
@@ -145,8 +143,7 @@ public class NbiEventCache {
         size.set(0);
         if(internalTransLock.isHeldByCurrentThread())
             internalTransLock.unlock();
-        BmscLogger.eventInfo(BmscLogger.PROVISIONING, 
-                "NbiEventCache is cleared with total events removed: " + list.size());
+        System.out.println("NbiEventCache is cleared with total events removed: " + list.size());
         return list;
     }
     

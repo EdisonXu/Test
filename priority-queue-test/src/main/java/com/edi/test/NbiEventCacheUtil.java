@@ -1,4 +1,4 @@
-package com.ericsson.ecds.bcc.prov.events;
+package com.edi.test;
 
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -8,8 +8,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.edi.test.ifc.BccConfigManagerRemote;
 import com.ericsson.bmsc.common.constant.ErrorCode;
-import com.ericsson.bmsc.oam.config.ifc.BccConfigManagerRemote;
 import com.ericsson.bmsc.oam.logging.BmscLogger;
 import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
 import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventHttpSender;
@@ -20,10 +20,13 @@ import com.ericsson.ecds.bcc.prov.common.exception.ProvisioningException;
 public class NbiEventCacheUtil {
 
     public static final int SENDER_POOL_SIZE = 20;
+    public static final int MAX_RETRY_TIMES = 3;
+    public static final int RETRY_INTERVAL_IN_SEC = 12;
     
     private static ExecutorService servicePool = Executors.newFixedThreadPool(SENDER_POOL_SIZE);
     private static Context context = null;
     private static BccConfigManagerRemote bccConfig = null;
+    
     
     public static void addEventToCache(BmscEventRetryTO event) {
         NbiEventCache.offer(event);

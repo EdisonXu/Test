@@ -1,11 +1,9 @@
-package com.ericsson.ecds.bcc.prov.common.data;
+package com.edi.test;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
-
-import com.ericsson.ecds.bcc.prov.common.event.NotificationTypeEnum;
 
 public class BmscEventRetryTO extends BmscEventTO {
 
@@ -69,10 +67,10 @@ public class BmscEventRetryTO extends BmscEventTO {
 			NotificationTypeEnum notificationType, Long embmsSessionId,
 			Long deliverySessionId, Long deliveryInstanceId,
 			String description, String contentURI, String md5Value,
-			Long contentGroupId, List<DeliveryContentTO> removedDeliveryContents) {
+			Long contentGroupId) {
 		super(version, notificationType, embmsSessionId, deliverySessionId,
 				deliveryInstanceId, description, contentURI, md5Value,
-				contentGroupId, removedDeliveryContents);
+				contentGroupId);
 		this.id = id;
 		this.retryTimes = retryTimes;
 		this.retryStartTime = retryStartTime;

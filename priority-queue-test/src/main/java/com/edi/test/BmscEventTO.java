@@ -1,20 +1,19 @@
 /**
  * 
  */
-package com.ericsson.ecds.bcc.prov.common.data;
+package com.edi.test;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ericsson.ecds.bcc.prov.common.event.NotificationTypeEnum;
 
 /**
  * BmscEventTO
  * 
  */
 @SuppressWarnings("serial")
-public class BmscEventTO implements ProvisioningTO, Serializable {
+public class BmscEventTO implements Serializable {
 
     public static final String DEFAULT_VERSION = "1.0";
     
@@ -35,9 +34,6 @@ public class BmscEventTO implements ProvisioningTO, Serializable {
     private String md5Value;
     
     private Long contentGroupId = null;
-    
-    private List<DeliveryContentTO> removedDeliveryContents;
-    
     
 
     /**
@@ -62,8 +58,7 @@ public class BmscEventTO implements ProvisioningTO, Serializable {
 	public BmscEventTO(String version, NotificationTypeEnum notificationType,
 			Long embmsSessionId, Long deliverySessionId,
 			Long deliveryInstanceId, String description, String contentURI,
-			String md5Value, Long contentGroupId,
-			List<DeliveryContentTO> removedDeliveryContents) {
+			String md5Value, Long contentGroupId) {
 		this.version = version;
 		this.notificationType = notificationType;
 		this.embmsSessionId = embmsSessionId;
@@ -73,7 +68,6 @@ public class BmscEventTO implements ProvisioningTO, Serializable {
 		this.contentURI = contentURI;
 		this.md5Value = md5Value;
 		this.contentGroupId = contentGroupId;
-		this.removedDeliveryContents = removedDeliveryContents;
 	}
 
 
@@ -252,17 +246,6 @@ public class BmscEventTO implements ProvisioningTO, Serializable {
         this.contentGroupId = contentGroupId;
     }
     
-    public List<DeliveryContentTO> getRemovedDeliveryContents() {
-        if(removedDeliveryContents == null) {
-            removedDeliveryContents = new ArrayList<DeliveryContentTO>();
-        }
-        return removedDeliveryContents;
-    }
-
-    public void setRemovedDeliveryContents(List<DeliveryContentTO> removedDeliveryContents) {
-        this.removedDeliveryContents = removedDeliveryContents;
-    }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

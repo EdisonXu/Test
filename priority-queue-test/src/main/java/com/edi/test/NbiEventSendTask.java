@@ -1,14 +1,6 @@
-package com.ericsson.ecds.bcc.prov.events;
+package com.edi.test;
 
 import java.util.List;
-
-import com.ericsson.bmsc.common.constant.ErrorCode;
-import com.ericsson.bmsc.common.oam.OamConstants;
-import com.ericsson.bmsc.common.oam.event.EventHandlerRemote;
-import com.ericsson.bmsc.oam.logging.BccAlarmHelper;
-import com.ericsson.bmsc.oam.logging.BmscLogger;
-import com.ericsson.ecds.bcc.prov.common.data.BmscEventRetryTO;
-import com.ericsson.ecds.bcc.prov.common.ejb.BmscEventHttpSenderRemote;
 
 /**
  * A stand alone thread task to send NBI event to BMC.
@@ -48,12 +40,12 @@ public class NbiEventSendTask implements Runnable{
             handleOK(event);
             break;
         case FULL:
-            BmscLogger.eventWarn(BmscLogger.PROVISIONING, "NBI event queue is full, will clear all data!");
+            System.out.println("event queue is full, will clear all data!");
             removeFromDb(NbiEventCache.clear());
             return;
         default:
             // should never come here
-            BmscLogger.eventError(BmscLogger.PROVISIONING, "Wrong status of NBI event queue.");
+        	System.out.println("Wrong status of NBI event queue.");
         }
     }
     
@@ -66,8 +58,7 @@ public class NbiEventSendTask implements Runnable{
     private void handleOverload(BmscEventRetryTO event) {
         if(event==null) return;
         
-        BmscLogger.eventWarn(BmscLogger.PROVISIONING, 
-                "NBI event queue is OVERLOADED, will discard low-priority event!");
+        System.out.println("NBI event queue is OVERLOADED, will discard low-priority event!");
         
         if(event.getNotificationType().getPriority()==0)
         {
@@ -75,10 +66,7 @@ public class NbiEventSendTask implements Runnable{
              * If it's low priority event, discard directly, and try to get next event in the 2nd level filtered
              * cache to handle.
              */
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING, Thread.currentThread().getName(),
-                    "Discard NBI event '" + event.toString() + "', current queue size: " 
-                            + NbiEventCache.size());
-            BmscLogger.eventWarn(BmscLogger.PROVISIONING, Thread.currentThread().getName() +
+            System.out.println(Thread.currentThread().getName() +
                     " Discard NBI event '" + event.toString() + "', current queue size: " 
                             + NbiEventCache.size());
             removeFromDb(event);
@@ -108,8 +96,7 @@ public class NbiEventSendTask implements Runnable{
         BmscEventHttpSenderRemote bmscEventSender = NbiEventCacheUtil.getSender();
         if(bmscEventSender == null)
         {
-            BmscLogger.eventError(BmscLogger.PROVISIONING, 
-                    "Cannot get a instance of BmscEventHttpSender when trying to send BDC event.");
+        	System.out.println("Cannot get a instance of BmscEventHttpSender when trying to send BDC event.");
             return;
         }
         int retrytimes = event.getRetryTimes();
@@ -117,21 +104,15 @@ public class NbiEventSendTask implements Runnable{
             boolean isSendOK = bmscEventSender.send(event);
 
             if (isSendOK) {
-                BmscLogger.eventDebug(BmscLogger.PROVISIONING, Thread.currentThread().getName(),
-                        "Successful to send NBI event '" + event.toString() + "', current queue size: " 
+            	System.out.println(Thread.currentThread().getName()+
+                        " Successful to send NBI event '" + event.toString() + "', current queue size: " 
                                 + NbiEventCache.size());
                 break;
             }
 
             if (retrytimes >= configuredRetryTime) {
-                BmscLogger.eventWarn(BmscLogger.PROVISIONING, "Discard BDC event " + event.getNotificationType()
+                System.out.println("Discard BDC event " + event.getNotificationType()
                         + " due to exceeding configured max retry time " + configuredRetryTime);
-                EventHandlerRemote eventHandler = BccAlarmHelper.getEventHandler();
-                if (eventHandler != null) {
-                    eventHandler.raiseAlarm(OamConstants.ALARM_mID_MDFCP, OamConstants.ALARM_ec_MDFCP2EMBM,
-                            OamConstants.ALARM_rsrcID_MDFCP,
-                            "The MDF-CP failed to send event notification message to the EMBM after retry " + configuredRetryTime + " times");
-                }
                 break;
             }
 
@@ -141,8 +122,8 @@ public class NbiEventSendTask implements Runnable{
             }
 
             retrytimes++;
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING, Thread.currentThread().getName(), 
-                    "Wait for re-sending the event '" + event.toString() + "' with retry time " + retrytimes );           
+            System.out.println(Thread.currentThread().getName()+ 
+                    "Wait for re-sending the event '" + event.toString() + "' with retry time " + retrytimes);
             waitForRetry();
         }
         removeFromDb(event);
@@ -152,7 +133,7 @@ public class NbiEventSendTask implements Runnable{
         try {
             Thread.sleep(retryInterval * 1000);
         } catch (InterruptedException e) {
-            BmscLogger.eventWarn(BmscLogger.PROVISIONING, "Interrupted when waiting for re-send BDC event to BMC");
+            e.printStackTrace();
         }
     }
     
@@ -170,9 +151,6 @@ public class NbiEventSendTask implements Runnable{
         try {
             handleEvent(null);
         } catch (Exception e) {
-            BmscLogger.eventError(BmscLogger.PROVISIONING, ErrorCode.SENDER_TASK_EXECUTE_FAILED, e);
-            BmscLogger.eventDebug(BmscLogger.PROVISIONING, 
-                    Thread.currentThread().getName() + ": NbiEventSendTask:run", e);
             e.printStackTrace();
         } finally
         {
