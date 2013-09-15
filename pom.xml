@@ -21,6 +21,7 @@
         <module>list-comparator-test</module>
         <module>ip-host-test</module>
     	<module>resteasy-test</module>
+    <module>priority-queue-test</module>
   </modules>
 
  <build>
