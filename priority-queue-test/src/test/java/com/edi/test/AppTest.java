@@ -17,9 +17,9 @@ public class AppTest
 	@Test
 	public void test()
 	{
-		JUnitCore junit = new JUnitCore();
-		for(int i=0;i<2;i++)
+		for(int i=0;i<100;i++)
 		{
+			JUnitCore junit = new JUnitCore();
 			System.out.println((i+1) + " times run start");
 			Result result = junit.run(NbiEventSendTaskTest.class);
 			if(!result.wasSuccessful())
@@ -28,6 +28,7 @@ public class AppTest
 				System.out.println(Arrays.toString(list.toArray()));
 				Assert.assertTrue(false);
 			}
+			
 		}
 			
 	    Assert.assertTrue(true);

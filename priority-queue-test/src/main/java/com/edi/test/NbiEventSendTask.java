@@ -23,22 +23,17 @@ public class NbiEventSendTask implements Runnable{
         this.retryInterval = retryInterval;
     }
     
-    private void handleEvent(BmscEventRetryTO event)
+    private void handleEvent(NbiEventCache.STATUS status, BmscEventRetryTO event)
     {
-        
-        switch(NbiEventCache.getStatus())
+        switch(status)
         {
         case OVERLOAD:
-            if(event==null)
-            {
-                event = NbiEventCache.poll();
-            }
+            event = NbiEventCache.poll(event);
             //System.out.println(Thread.currentThread().getName() + " discard event " + event + " queue size" + NbiEventCache.size());
             handleOverload(event);
             break;
         case OK:
-            if(event==null)
-                event = NbiEventCache.poll();
+        	event = NbiEventCache.poll(event);
             handleOK(event);
             break;
         case FULL:
@@ -51,6 +46,20 @@ public class NbiEventSendTask implements Runnable{
         }
     }
     
+    private void send()
+    {
+    	handleEvent(NbiEventCache.getStatus(),null);
+    }
+    
+    private void handleNext(BmscEventRetryTO old) {
+    	/*
+    	 * If the old event don't have a eMBMS session id, it will not have a queue in the 
+    	 * 2nd level filtered cache, so return directly.
+    	 */
+    	if(old==null || old.getEMBMSSessionId()==null) return;
+    	handleEvent(NbiEventCache.getStatus(), old);
+    }
+    
     private void handleOK(BmscEventRetryTO event)
     {
         if(event==null) return;
@@ -60,7 +69,7 @@ public class NbiEventSendTask implements Runnable{
     private void handleOverload(BmscEventRetryTO event) {
         if(event==null) return;
         
-        System.out.println("NBI event queue is OVERLOADED, will discard low-priority event!");
+        //System.out.println("NBI event queue is OVERLOADED, will discard low-priority event!");
         
         if(event.getNotificationType().getPriority()==0)
         {
@@ -68,13 +77,15 @@ public class NbiEventSendTask implements Runnable{
              * If it's low priority event, discard directly, and try to get next event in the 2nd level filtered
              * cache to handle.
              */
-            System.out.println(Thread.currentThread().getName() +
+/*            System.out.println(Thread.currentThread().getName() +
                     " Discard NBI event '" + event.toString() + "', current queue size: " 
                             + NbiEventCache.size());
+*/            System.out.println(Thread.currentThread().getName() +
+                    " Discard NBI event ' Id=" + event.getId() + ", eMBMSSessionId=" + event.getEMBMSSessionId() + "', current queue size: " 
+                            + NbiEventCache.size());
+
             removeFromDb(event);
-            event = NbiEventCache.removeAndGetNext(event);
-            if(event!=null)
-                handleEvent(event);
+            handleNext(event);
         }else
         {
             /*
@@ -88,9 +99,10 @@ public class NbiEventSendTask implements Runnable{
         doSend(event);
         // check whether if there's a event with a same eMBMS session id
         // if yes, peek it and continue to send in current thread
-        event = NbiEventCache.removeAndGetNext(event);
+        /*event = NbiEventCache.removeAndGetNext(event);
         if(event!=null)
-            handleEvent(event);
+            handleEvent(event);*/
+        handleNext(event);
     }
     
     private void doSend(BmscEventRetryTO event){
@@ -151,7 +163,7 @@ public class NbiEventSendTask implements Runnable{
     @Override
     public void run() {
         try {
-            handleEvent(null);
+        	send();
         } catch (Exception e) {
             e.printStackTrace();
         } finally

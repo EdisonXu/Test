@@ -75,25 +75,62 @@ public class NbiEventCache {
              * If the eMBMS session id is not null, remove it from the 1st level queue 
              * and add it into the 2nd level cache filtered by eMBMS session id.
              */
-            synchronized (filteredEventCache) {
-                /*
-                 * If already contained, means that there's already a thread sending a event with
-                 * a same eMBMS session id. Then add this one to the filtered cache and peek the next.
-                 */
-                if(filteredEventCache.containSameSessionId(event.getEMBMSSessionId()))
-                {
-                    filteredEventCache.add(event);
-                    //internalTransLock.unlock();
-                    return null;
-                }
+        	/*
+             * If already contained, means that there's already a thread sending a event with
+             * a same eMBMS session id. Then add this one to the filtered cache and peek the next.
+             */
+            if(filteredEventCache.containSameSessionId(event.getEMBMSSessionId()))
+            {
+            	if(size.get()>3500)
+                	System.out.println("[" + Thread.currentThread().getName() + "] adds event Id=" + event.getId() + ", eMBMSSessionId=" +event.getEMBMSSessionId() + " current size: "+ size.get());
                 filteredEventCache.add(event);
+                //internalTransLock.unlock();
+                return null;
             }
+            filteredEventCache.add(event);
         }
         size.decrementAndGet();
         if(size.get()>3500)
-            System.out.println(Thread.currentThread().getName() + " Reduce to" + size.get());
-        internalTransLock.unlock();
+        {
+        	//System.out.println(Thread.currentThread().getName() + " Reduce to" + size.get());
+        	//debug
+            if(event!=null)
+            	System.out.println("[" + Thread.currentThread().getName() + "] pick event Id=" + event.getId() + ", eMBMSSessionId=" +event.getEMBMSSessionId() + " current size: "+ size.get());
+        }
+            
+        releaseLock();
         return event;
+    }
+    
+    /**
+     * Poll the next event in the 2nd level filtered cache.
+     * @param old The last event that has been handled.
+     * @return the next event in the 2nd level cache with a same eMBMS session id with the one input. 
+     */
+    public static BmscEventRetryTO poll(BmscEventRetryTO old)
+    {
+    	if(old==null)
+    		return poll();
+    	
+    	/*
+    	 * If the event don't have a eMBMS session id, it will not have a queue in the 
+    	 * 2nd level filtered cache, so return directly.
+    	 */
+    	if(old.getEMBMSSessionId() == null) return null;
+        
+        if(!internalTransLock.isHeldByCurrentThread())
+            internalTransLock.lock();
+        
+        filteredEventCache.poll(old.getEMBMSSessionId());
+        BmscEventRetryTO next = filteredEventCache.peek(old.getEMBMSSessionId());
+        if(next!=null)
+        {
+        	size.decrementAndGet();
+        	if(size.get()>3500)
+                System.out.println(Thread.currentThread().getName() + " reduces to " + size.get());
+        }
+        releaseLock();
+        return next; 
     }
     
     public static void releaseLock()
@@ -135,39 +172,43 @@ public class NbiEventCache {
         // double confirm the status here to avoid multiple threads are
         // executing the clear() method to make the new coming events after clear is removed.
         if(!getStatus().equals(STATUS.FULL))
+        {
+        	releaseLock();
         	return list;
+        }
         
         if(queue.size()>0)
             list.addAll(queue);
         if(list.size()>0)
             queue.clear();
         
-        synchronized (filteredEventCache) {
-            list.addAll(filteredEventCache.clear());
-        }
+        list.addAll(filteredEventCache.clear());
+        
         size.set(0);
-        if(internalTransLock.isHeldByCurrentThread())
-            internalTransLock.unlock();
+        releaseLock();
         System.out.println("NbiEventCache is cleared with total events removed: " + list.size());
         return list;
     }
     
     public static BmscEventRetryTO removeAndGetNext(BmscEventRetryTO event)
     {
-        if(!internalTransLock.isHeldByCurrentThread())
-            internalTransLock.lock();
         if(event==null || event.getEMBMSSessionId() == null) return null;
         
-        synchronized (filteredEventCache) {
-            filteredEventCache.poll(event.getEMBMSSessionId());
-            event = filteredEventCache.peek(event.getEMBMSSessionId());
-            if(event!=null)
-                size.decrementAndGet();
-            if(size.get()>3500)
-                System.out.println(Thread.currentThread().getName() + " Reduce to " + size.get());
-            internalTransLock.unlock();
-            return event; 
+        if(!internalTransLock.isHeldByCurrentThread())
+            internalTransLock.lock();
+        
+        filteredEventCache.poll(event.getEMBMSSessionId());
+        event = filteredEventCache.peek(event.getEMBMSSessionId());
+        if(event!=null)
+        {
+        	size.decrementAndGet();
+        	if(size.get()>3500)
+                System.out.println(Thread.currentThread().getName() + " reduces to " + size.get());
+        	// should not release the lock here to keep the atmoic operation with getStatus()
+        	return event;
         }
+        releaseLock();
+        return null; 
     }
     
     public static int size()

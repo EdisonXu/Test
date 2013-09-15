@@ -53,7 +53,6 @@ public class NbiEventSendTaskTest {
      * Test the situation that all events have a random eMBMS session id.
      */
     @Test
-    @Ignore
     public void testSendRadomEmbmsSessionEvents() throws InterruptedException {
         System.out.println("testSendRadomEmbmsSessionEvents begin.");
         BmscEventHttpSenderRemote sender1 = new SendSimulater(0);
@@ -85,7 +84,6 @@ public class NbiEventSendTaskTest {
      * Test the situation that all events have a same eMBMS session id.
      */
     @Test
-    @Ignore
     public void testSendSameEmbmsSessionEvents() throws Exception {
         System.out.println("testSendSameEmbmsSessionEvents begin.");
         BmscEventHttpSenderRemote sender1 = new SendSimulater(0);
@@ -118,7 +116,6 @@ public class NbiEventSendTaskTest {
      * Test the situation that all events have a unique eMBMS session id.
      */
     @Test
-    @Ignore
     public void testSendNoSameEmbmsSessionEvents() throws Exception {
         System.out.println("testSendNoSameEmbmsSessionEvents begin.");
         BmscEventHttpSenderRemote sender1 = new SendSimulater(0);
@@ -151,7 +148,6 @@ public class NbiEventSendTaskTest {
      * Test the situation that all events don't have a same eMBMS session id.
      */
     @Test
-    @Ignore
     public void testSendNoEmbmsSessionIdEvents() throws Exception {
         System.out.println("testSendNoEmbmsSessionIdEvents begin.");
         BmscEventHttpSenderRemote sender1 = new SendSimulater(0);
@@ -193,7 +189,6 @@ public class NbiEventSendTaskTest {
      * Make sure the events with same id will be sent within order.
      */
     @Test
-    @Ignore
     public void testEventSequence() throws InterruptedException {
         System.out.println("testEventSequence begin.");
         reset();
@@ -294,7 +289,6 @@ public class NbiEventSendTaskTest {
      * be the sender pool size.
      */
     @Test
-    @Ignore
     public void testFull() throws Exception
     {
         System.out.println("testFull begin.");
