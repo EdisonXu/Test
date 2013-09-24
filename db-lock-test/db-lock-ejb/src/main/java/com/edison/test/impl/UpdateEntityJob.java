@@ -20,7 +20,6 @@ public class UpdateEntityJob extends MyJob {
 	public void execute() {
 	    //System.out.println("Execute UpdateEntityJob");
 		td.getLock().lock();
-		td.getLock().unlock();
 		//getDbManager().lock(td.getId());
 		ReupdateEntityJob job = new ReupdateEntityJob(td);
 		getTimer().schedule(new Date(), job);
@@ -32,6 +31,7 @@ public class UpdateEntityJob extends MyJob {
 		System.out.println("Execute Update " + td.getId());
 		td.setAttribute("Update");
 		getDbManager().update(td);
+		td.getLock().unlock();
 		
 	}
 

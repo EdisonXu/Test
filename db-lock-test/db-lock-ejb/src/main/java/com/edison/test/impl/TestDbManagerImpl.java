@@ -47,7 +47,7 @@ public class TestDbManagerImpl implements TestDbManager {
 		
 		if(old==null)
 		{
-			log.error("No old entity " + input.getId() + "  found when trying to update");
+			log.error("No old entity " + input.getId() + "  found when trying to update to '" + input.getAttribute() + "'");
 			return;
 		}
 		old.setAttribute(input.getAttribute());
@@ -87,7 +87,7 @@ public class TestDbManagerImpl implements TestDbManager {
 		TestEntity old = entityManager.find(TestEntity.class, id);
 		if(old==null)
 		{
-		    System.out.println("whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+		    System.out.println("Failed to lock");
 		    return;
 		}
 		//entityManager.merge(old);

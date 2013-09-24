@@ -21,7 +21,7 @@ public class CreateEntityJob extends MyJob {
         td = getDbManager().create(td);
         td.getLock().lock();
         UpdateEntityJob updateJob = new UpdateEntityJob(td);
-        getTimer().schedule(new Date(), updateJob);
+        getTimer().schedule(new Date(System.currentTimeMillis()+2000), updateJob);
         td.getLock().unlock();
     }
 

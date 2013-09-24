@@ -17,8 +17,8 @@ public class ReupdateEntityJob extends MyJob {
 	@Override
 	public void execute() {
 	    //System.out.println("Execute ReupdateEntityJob");
+	    td.getLock().lock();
 		//getDbManager().lock(td.getId());
-		td.setAttribute("Reupdate");
 		RemoveEntityJob removeJob = new RemoveEntityJob(td);
 		/*getTimer().schedule(0l, removeJob);
 		try {
@@ -27,7 +27,9 @@ public class ReupdateEntityJob extends MyJob {
 			e.printStackTrace();
 		}*/
 		System.out.println("Execute Reupdate " + td.getId());
+		td.setAttribute("Reupdate");
 		getDbManager().update(td);
+		td.getLock().unlock();
 	}
 
 }
